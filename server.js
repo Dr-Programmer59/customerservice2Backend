@@ -107,6 +107,7 @@ let waitingCustomer=[]
       
       // Remove the client from the clients array
       adminsAndsubAdmins = adminsAndsubAdmins.filter(client => client.socketId !== socket.id);
+      adminData=null;
       console.log('Updated clients:', adminsAndsubAdmins);
     });
 });
