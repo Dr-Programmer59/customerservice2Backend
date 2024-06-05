@@ -13,7 +13,9 @@ const ConversationSchema = new mongoose.Schema({
         ref:Employee,
     
     },
-    
+    newMessages:{
+        type:Number,
+    },
     members: {
         type: Array
     },

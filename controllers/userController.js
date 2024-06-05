@@ -148,7 +148,7 @@ exports.updateProfile=AsyncErrorHandler(async(req,res,next)=>{
     const newUserdata={
         name:req.body.name,
      
-        category:req.body.category
+        role:req.body.role
     };
     const user=await User.findByIdAndUpdate(req.params.id,newUserdata);
     if(!user){

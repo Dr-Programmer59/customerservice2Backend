@@ -31,7 +31,7 @@ let customers={
 
 }
 let waitingCustomer=[]
-
+let onlineEmployees={}
 
 
 
@@ -58,6 +58,11 @@ let waitingCustomer=[]
           console.log("joining room for cuistomer ",person.roomId)
           socket.join(person.roomId)
         }
+      else if(person.role=="employee"){
+        onlineEmployees[person.userId]=person.socketId;
+      console.log("online employee  ",onlineEmployees)
+
+      }
         console.log("current admuins ",adminsAndsubAdmins)
     })
     socket.on("join-room:employee",({roomId})=>{
@@ -102,11 +107,27 @@ let waitingCustomer=[]
     }
 
     })
+    socket.on("transfer:employee",(person)=>{
+      console.log("transfering ")
+      console.log(person.userId)
+      if(onlineEmployees[person.userId]){
+        console.log("transfering customer to online employee ",person.userId)
+        io.to(onlineEmployees[person.userId]).emit("newCustomer:employee",{check:true})
+
+      }
+
+    })
     socket.on('disconnect', () => {
       console.log('Client disconnected:', socket.id);
       
       // Remove the client from the clients array
       adminsAndsubAdmins = adminsAndsubAdmins.filter(client => client.socketId !== socket.id);
+      for (let key in onlineEmployees) {
+        if (onlineEmployees[key] === socket.id) {
+          delete onlineEmployees[key];
+        }
+      }
+      console.log("online employee after disconnected ",onlineEmployees)
       adminData=null;
       console.log('Updated clients:', adminsAndsubAdmins);
     });
