@@ -85,9 +85,11 @@ let onlineEmployees={}
     })
     socket.on("send-msg",(data)=>{
     const clientsInRoom = io.sockets.adapter.rooms.get(data.roomId);
+
     if (clientsInRoom) {
       const clientIds = Array.from(clientsInRoom);
       if(adminData){
+        
         console.log("")
       clientIds.push(adminData.socketId)
       }
@@ -128,7 +130,9 @@ let onlineEmployees={}
         }
       }
       console.log("online employee after disconnected ",onlineEmployees)
-      adminData=null;
+      if(socket.id == adminData?.socketId){
+        adminData=null;
+      }
       console.log('Updated clients:', adminsAndsubAdmins);
     });
 });
