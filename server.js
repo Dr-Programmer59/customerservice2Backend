@@ -85,7 +85,7 @@ let onlineEmployees={}
     })
     socket.on("send-msg",(data)=>{
     const clientsInRoom = io.sockets.adapter.rooms.get(data.roomId);
-
+    console.log(data.roomId)
     if (clientsInRoom) {
       const clientIds = Array.from(clientsInRoom);
       if(adminData){
@@ -108,6 +108,9 @@ let onlineEmployees={}
       
     }
 
+    if(adminData){
+      io.to(adminData.socketId).emit("adapter:Changes",({check:true}));
+    }
     })
     socket.on("transfer:employee",(person)=>{
       console.log("transfering ")

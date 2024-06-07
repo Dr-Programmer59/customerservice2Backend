@@ -6,7 +6,12 @@ exports.newMessage = async (request, response) => {
     const newMessage = new Message(request.body);
     try {
         await newMessage.save();
-        await Conversation.findByIdAndUpdate(request.body.conversationId, { message: request.body.text });
+        if(request.body.roomId==request.body.senderId){
+        await Conversation.findByIdAndUpdate(request.body.conversationId, { message: request.body.text,$inc: { newMessages: 1 } });
+        }
+        else{
+            await Conversation.findByIdAndUpdate(request.body.conversationId, { message: request.body.text})
+        }
         response.status(200).json("Message has been sent successfully");
     } catch (error) {
         response.status(500).json(error);
